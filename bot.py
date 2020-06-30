@@ -70,7 +70,7 @@ async def on_ready():
 
 @client.event 
 async def on_message(message):
-    if str(message.author) == 'DaddyBot#2616' and getjson('r')['settings']['rude'] != 'true':
+    if str(message.author) == 'DaddyBot#2616' and getjson('r')['settings']['rude'] == 'true':
         await message.channel.send('shut the fuck up daddybot')
     if check_perms(str(message.author), 'blacklist'):
         return
@@ -263,6 +263,15 @@ async def update(ctx, *args):
 @client.command()
 async def getsettings(ctx):
     await ctx.send(getjson('r'))
+
+
+@client.command()
+async def opgg(ctx, *args):
+    summoner = ''
+    for i in args:
+        summoner += i + '%20'
+    await ctx.send('https://na.op.gg/summoner/{}'.format(summoner))
+
 
     
 client.run(TOKEN)

@@ -24,5 +24,8 @@ tasks
 riot api
 reddit api 
 opgg site search 
-requests library
-
+requests library (just look into it)
+embeds
+audio
+explore discord api
+git hooks + bat file on remote server
