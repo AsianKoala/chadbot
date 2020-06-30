@@ -2,18 +2,16 @@ import discord
 from discord.ext import commands
 
 import wolframalpha
-import aiohttp
-import io
+import aiohttp, io
 import riotwatcher
-import json
-import requests
-import shutil
-import os
+import requests, json
+import shutil, os
+import tokens
 
 
 # globals
-TOKEN = 'NzI1NDU0MTMwMTg0NzE2Mzgw.XvO9_Q.UNW_hd8eaEDsjHbV5UgZZur8ABE'
-WOLFRAM_ID = 'R5LHHU-6VTE78Q7KK'
+TOKEN = tokens.DISCORD_TOKEN
+WOLFRAM_ID = tokens.WOLFRAM_TOKEN
 RIOTKEY = 'RGAPI-26405f6d-2e65-4ff0-a67d-fbf9bd56db05'
 BETTERRIOTKEY = 'RGAPI-2330e647-0206-4545-b382-74cc029c1db3'
 
