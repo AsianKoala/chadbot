@@ -1,0 +1,28 @@
+bot token: NzI1NDU0MTMwMTg0NzE2Mzgw.XvO9_Q.UNW_hd8eaEDsjHbV5UgZZur8ABE
+my username: asiank0ala#8008
+wolfram alpha app id: R5LHHU-6VTE78Q7KK
+riot API key: RGAPI-26405f6d-2e65-4ff0-a67d-fbf9bd56db05
+
+        await ctx.send(f'''
+        SUMMONER: {ranked_stats['summoner']} 
+        QUEUE TYPE: {ranked_stats['queueType']} 
+        RANK: {ranked_stats['tier']}  
+        CURRENT LP: {ranked_stats['leaguePoints']} 
+        WINS: {ranked_stats['wins']} 
+        LOSSES: {ranked_stats['losses']} 
+        INACTIVE: {ranked_stats['inactive']} 
+        STREAK: {ranked_stats['hotStreak']} ''')
+
+
+josh riot api key: RGAPI-2330e647-0206-4545-b382-74cc029c1db3
+
+DaddyBot#2616
+
+
+tasks 
+-----
+riot api
+reddit api 
+opgg site search 
+requests library
+
