@@ -42,33 +42,52 @@ def listToString(list):
 def is_me(m):
     return m.author == client.user 
 
-def getjson(mode):
-    settings_file = open("./bot_settings.json", mode)
+def getjson():
+    settings_file = open("./bot_settings.json", 'r')
     return json.load(settings_file)
 
 def check_perms(user, level):
-    ourjson = getjson('r')['userlist'][level]
+    ourjson = getjson()['userlist'][level]
     check = False
     for element in ourjson:
         if ourjson[element] == user:
             check = True
     return check
+
+def updatejson(*args):
+    obj = getjson()
+
+    if args[0] == 'delete':
+        if args[1] == 'userlist':
+            del obj['userlist'][args[2]][args[3]]
+        else:
+            del obj['settings'][args[2]]
+    else:
+        if len(args) > 3:
+            obj[args[0]][args[1]][args[2]] = args[3]
+        else:
+            obj[args[0]][args[1]] = args[2]
+    
+    settings_file = open('bot_settings', 'w')
+    json.dump(obj, settings_file)
+    settings_file.close()
+    print(obj)
         
     
 @client.event
 async def on_ready():
     print(' the bot is ready')
     await client.change_presence(activity=discord.Game('in bed with Daddy Bot'))
-
+    copypath = './temp/bot_settings_copy.json'
     # remove the copy of bot_settings
-    if os.path.exists('./bot_settings_copy.json'):
-        os.remove('./bot_settings_copy.json')
-    shutil.copy('./bot_settings.json', './bot_settings_copy.json')
+    if os.path.exists(copypath):
+        os.remove(copypath)
+    shutil.copy('./bot_settings.json', copypath)
 
 
 @client.event 
 async def on_message(message):
-    if str(message.author) == 'DaddyBot#2616' and getjson('r')['settings']['rude'] == 'true':
+    if str(message.author) == 'DaddyBot#2616' and getjson()['settings']['rude'] == 'true':
         await message.channel.send('shut the fuck up daddybot')
     if check_perms(str(message.author), 'blacklist'):
         return
@@ -237,9 +256,7 @@ async def update(ctx, *args):
     if not check_perms(str(ctx.author), 'admins'):
         await ctx.send('shut up retard')
         return 
-    settings_file = open("./bot_settings.json", "r")
-    obj = json.load(settings_file)
-    settings_file.close()
+    obj = getjson()
 
     if args[0] == 'delete':
         if args[1] == 'userlist':
@@ -252,7 +269,7 @@ async def update(ctx, *args):
         else:
             obj[args[0]][args[1]] = args[2]
     
-    settings_file = open("./bot_settings.json", "w")
+    settings_file = open('./bot_settings.json', 'w')
     json.dump(obj, settings_file)
     settings_file.close()
     await ctx.send(obj)
@@ -260,7 +277,7 @@ async def update(ctx, *args):
 
 @client.command()
 async def getsettings(ctx):
-    await ctx.send(getjson('r'))
+    await ctx.send(getjson())
 
 
 @client.command()
@@ -269,6 +286,9 @@ async def opgg(ctx, *args):
     for i in args:
         summoner += i + '%20'
     await ctx.send('https://na.op.gg/summoner/{}'.format(summoner))
+
+
+
 
 
     
