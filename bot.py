@@ -2,24 +2,18 @@ import discord
 from discord.ext import commands
 import wolframalpha
 import aiohttp, io
-import riotwatcher
 import requests, json
 import shutil, os
 import tokens
-import urllib.request
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup as bs
 
 
 # globals
 TOKEN = tokens.DISCORD_TOKEN
 WOLFRAM_ID = tokens.WOLFRAM_TOKEN
-RIOTKEY = 'RGAPI-26405f6d-2e65-4ff0-a67d-fbf9bd56db05'
-BETTERRIOTKEY = 'RGAPI-2330e647-0206-4545-b382-74cc029c1db3'
 
 client = commands.Bot(command_prefix= 'chad ')
 wolframClient = wolframalpha.Client(WOLFRAM_ID)
-lolwatcher = riotwatcher.LolWatcher(BETTERRIOTKEY)
-
 
 
 def isFloat(string):
@@ -164,39 +158,6 @@ async def status(ctx, *,args):
     await ctx.send(f'status changed to {args}')
 
 
-summoner = ''
-region = ''
-@client.command()
-async def league(ctx, *args):
-    if args[0] == 'help':
-        await ctx.send(''' 
-        commands: settings [region] [username]: stores region and settings
-        stats: gets ranked stats of stored user
-        match [number]: match data from x matches ago''' )
-
-    elif args[0] == 'settings':
-        global region
-        global summoner
-        summoner = ''
-        region = args[1]
-        for x in args[2:]:
-            summoner += x + ' '
-        await ctx.send(f'summoner set to {summoner}')
-        await ctx.send(f'region set to {region}')
-
-    elif args[0] == 'stats':
-            me = lolwatcher.summoner.by_name(region, summoner)
-            statsList = lolwatcher.league.by_summoner(region, me['id'])
-            ranked_stats = statsList[0]
-            await ctx.send('STATS')
-            await ctx.send('---------')
-            for key, value in ranked_stats.items():
-                await ctx.send('{}: {}'.format(key, value))
-    #    except: 
-  #          await ctx.send('Connection refused')
-      #      await ctx.send('Fix ur api key :flushed:')
-
-
 @client.command()
 async def translate(ctx, *, args):
     alphabet = ' abcdefghijklmnopqrstuvwxyz'
@@ -291,12 +252,21 @@ async def opgg(ctx, *args):
 
 @client.command()
 async def play(ctx, args):
-    url = ''
-    if args[:18] == 'youtube.com/watch?':
-        url = args
-    else:
-        pass
-    
+    base="https://www.youtube.com/results?search_query="
+    query="mickey+mouse"
+    r = requests.get(base+query)
+    page=r.text
+    soup=bs(page,'html.parser')
+
+    vids = soup.findAll('a',attrs={'class':'yt-uix-tile-link'})
+
+    videolist=[]
+    for v in vids:
+        tmp = 'https://www.youtube.com' + v['href']
+        videolist.append(tmp)
+    print(videolist)
+
+
 
 @client.command()
 async def loop(ctx):

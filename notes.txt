@@ -23,8 +23,7 @@ tasks
 -----
 riot api
 reddit api 
-opgg site search 
-requests library (just look into it)
+scraping
 embeds
 audio
 explore discord api
