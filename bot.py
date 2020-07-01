@@ -1,12 +1,13 @@
 import discord
 from discord.ext import commands
-
 import wolframalpha
 import aiohttp, io
 import riotwatcher
 import requests, json
 import shutil, os
 import tokens
+import urllib.request
+from bs4 import BeautifulSoup
 
 
 # globals
@@ -288,7 +289,22 @@ async def opgg(ctx, *args):
     await ctx.send('https://na.op.gg/summoner/{}'.format(summoner))
 
 
+@client.command()
+async def play(ctx, args):
+    url = ''
+    if args[:18] == 'youtube.com/watch?':
+        url = args
+    else:
+        pass
+    
 
+@client.command()
+async def loop(ctx):
+    pass 
+
+@client.command()
+async def queue(ctx, args):
+    pass 
 
 
     
