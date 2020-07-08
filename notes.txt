@@ -28,3 +28,6 @@ embeds
 audio
 explore discord api
 git hooks + bat file on remote server
+
+
+bot-testing channel id = 726954585654034522

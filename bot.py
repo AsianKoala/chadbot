@@ -6,6 +6,7 @@ import requests, json
 import shutil, os
 import tokens
 from bs4 import BeautifulSoup as bs
+import time
 
 
 # globals
@@ -14,6 +15,9 @@ WOLFRAM_ID = tokens.WOLFRAM_TOKEN
 
 client = commands.Bot(command_prefix= 'chad ')
 wolframClient = wolframalpha.Client(WOLFRAM_ID)
+botusername = 'ChadBot#5522'
+me = 'asiank0ala#8008'
+starttime = time.perf_counter()
 
 
 def isFloat(string):
@@ -82,10 +86,15 @@ async def on_ready():
 
 @client.event 
 async def on_message(message):
+    godmode = False
     if str(message.author) == 'DaddyBot#2616' and getjson()['settings']['rude'] == 'true':
         await message.channel.send('shut the fuck up daddybot')
     if check_perms(str(message.author), 'blacklist'):
         return
+    if str(message.author) == me or str(message.author) == botusername:
+        godmode = True
+    if message.channel.id == 726954585654034522 and not godmode:
+        return 
     await client.process_commands(message)
 
 
@@ -100,18 +109,13 @@ async def ping(ctx):
 
 
 @client.command()
-async def clearsend(ctx, *, args):
-    await ctx.channel.purge(limit=1)
-    await ctx.send(args)
-
-
-@client.command()
-async def clear(ctx, amount=10):
+async def clear(ctx, amount, arg):
     if not check_perms(str(ctx.author), 'admins'):
         await ctx.send('shut up retard')
         return
-    deleted = await ctx.channel.purge(limit=amount+1)
-    await ctx.send(f'deleted {amount} messages')
+    deleted = await ctx.channel.purge(limit=int(amount)+1)
+    if arg != 'quiet':
+        await ctx.send(f'deleted {amount} messages')
 
 
 @client.command()
@@ -236,7 +240,6 @@ async def update(ctx, *args):
     settings_file.close()
     await ctx.send(obj)
 
-
 @client.command()
 async def getsettings(ctx):
     await ctx.send(getjson())
@@ -266,8 +269,6 @@ async def play(ctx, args):
         videolist.append(tmp)
     print(videolist)
 
-
-
 @client.command()
 async def loop(ctx):
     pass 
@@ -275,6 +276,85 @@ async def loop(ctx):
 @client.command()
 async def queue(ctx, args):
     pass 
+
+
+@client.command()
+async def dm(ctx, user, *, args):
+    target = ctx.guild.get_member_named(user)
+    await target.send(args)
+
+@client.command()
+async def uptime(ctx):
+    diff = time.perf_counter() - starttime # in seconds
+    hours = diff // 3600
+    minutes = diff // 60
+    seconds = diff - hours * 3600 - minutes * 60
+    await ctx.send(f'{int(hours)}:{int(minutes)}:{int(seconds)}')
+    
+@client.command() 
+async def test(ctx):
+    diff = time.perf_counter() - starttime # in seconds
+    hours = diff // 3600
+    minutes = diff // 60
+    seconds = diff - hours * 3600 - minutes * 60
+    await ctx.send(f'{int(hours)}:{int(minutes)}:{int(seconds)}')
+
+
+
+@client.command()
+async def belle(ctx):
+    await ctx.send("""You were thinking I died? Bitch, surprise
+I still got them double-thick thighs, french fries
+I get down and gobble, gobble up, with my booty up
+She be going wobble wobble up, here's a big duck
+Slide, slide in the peanut butter, don’t Zucc her
+Who actually regrets me? My mother
+I trolled betas with my Pornhub, betrayer
+You nothin' but a hater hater, clout chaser
+
+Now I watch my favorite Twitch thot, damn, she hot
+What the fuck is with this mugshot? Ratatata
+Elon's baby eat a Mars rock
+Now I TikTok, begone, thot, begone, thot
+All these simps always talkin’ shit, yada-yada-ya
+When you see me, what you talking 'bout, little beansprout?
+We're laughing 'cause you burnt out, got no clout
+Yeah, you weak without your ass out (Yeah, yeah)
+(What are you, fucking gay?)
+Are you dumb, stupid, or dumb, huh?
+Play me like a dummy, like, bitch, are dumb?
+Are you dumb, stupid, or dumb?
+Yeah, you got your money but you still freakin' ugly
+XD, listen, you're not a politician
+Yes, I'm a gamer, also a taxpayer
+Skeet, yada, pass me Doritos
+Send nudes, nani? Delphine, you nasty
+Egg white, bite it, see that, get excited
+Good vid, Susan, not allowed, copyrighted
+You're boomer, I’m doomer, guess what? You die sooner
+(Hey, that’s pretty good)
+
+You were thinking I died? Bitch, surprise
+I still got them double-thick thighs, no lies
+I get down and gobble, gobble up, with my booty up
+She be going wobble wobble up, here's a big duck
+Slide, slide in the peanut butter, don’t Zucc her
+Who actually regrets me? My mother
+I trolled betas with my Pornhub, betrayer
+You nothin' but a hater hater, clout chaser
+
+You're mad I'm back? Big mad
+He’s mad, she's mad, big sad
+Haha, don't care, stay mad
+Aha, aha, aha
+Uwu, buy my OnlyFans, you big Chad
+Little titties, big ass, and no dad
+Bathwater sold out, big sad
+OnlyFans now to get a big bag
+
+Omae wa mō shindeiru
+Nani?""")
+
 
 
     
