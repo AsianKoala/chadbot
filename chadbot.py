@@ -15,9 +15,19 @@ WOLFRAM_ID = tokens.WOLFRAM_TOKEN
 
 client = commands.Bot(command_prefix= 'chad ')
 wolframClient = wolframalpha.Client(WOLFRAM_ID)
-botusername = 'ChadBot#5522'
-me = 'asiank0ala#8008'
 starttime = time.perf_counter()
+deleted_image_storage = []
+
+
+
+copypath = './temp/bot_settings_copy.json'
+# remove all temp files
+
+if os.path.isdir('./temp/'):
+    shutil.rmtree('temp')
+os.makedirs('temp')
+shutil.copy('./bot_settings.json', copypath)
+
 
 
 def isFloat(string):
@@ -77,11 +87,7 @@ def updatejson(*args):
 async def on_ready():
     print(' the bot is ready')
     await client.change_presence(activity=discord.Game('in bed with Daddy Bot'))
-    copypath = './temp/bot_settings_copy.json'
-    # remove the copy of bot_settings
-    if os.path.exists(copypath):
-        os.remove(copypath)
-    shutil.copy('./bot_settings.json', copypath)
+
 
 
 @client.event 
@@ -89,9 +95,20 @@ async def on_message(message):
     godmode = False
     if str(message.author) == 'DaddyBot#2616' and getjson()['settings']['rude'] == 'true':
         await message.channel.send('shut the fuck up daddybot')
+    if str(message.author) != 'asiank0ala#8008' and str(message.author) != 'Chad Bot#5522' and getjson()['settings']['rude'] == 'true':
+        await message.channel.send('shut the fuck up faggot')
+    try:
+        mystr = str(message.attachments[0])
+        print(mystr)
+        myurl = mystr[mystr.find('https'):-1]
+        deleted_image_storage.append(str(message.author) + ' ' + myurl)
+        file = requests.get(myurl)
+        open('./temp/testfile.png', 'wb').write(file.content)
+    except:
+        pass
     if check_perms(str(message.author), 'blacklist'):
         return
-    if str(message.author) == me or str(message.author) == botusername:
+    if str(message.author) == 'asiank0ala#8008' or str(message.author) == 'Chad Bot#5522':
         godmode = True
     if message.channel.id == 726954585654034522 and not godmode:
         return 
@@ -293,12 +310,12 @@ async def uptime(ctx):
     
 @client.command() 
 async def test(ctx):
-    diff = time.perf_counter() - starttime # in seconds
-    hours = diff // 3600
-    minutes = diff // 60
-    seconds = diff - hours * 3600 - minutes * 60
-    await ctx.send(f'{int(hours)}:{int(minutes)}:{int(seconds)}')
+    pass
 
+@client.command() 
+async def download(ctx, url):
+    r = requests.get(url, allow_redirects=True)
+    open('./5Head.jpg', 'wb').write(r.content)
 
 
 @client.command()
