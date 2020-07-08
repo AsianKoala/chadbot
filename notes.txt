@@ -28,7 +28,10 @@ embeds
 audio
 explore discord api
 git hooks + bat file on remote server
-
+DOWNLAOD COMMAND THING
+DOWNLOAD ON MESSAGE 
+DOWNLOAD TO PC NOT WORKING CAUSE FILE CORRUPT
+FUCKING TIDY UP THE ON_MESSAGE CODE ALREADY YOU LAZY FUCK
 
 bot-testing channel id = 726954585654034522
 
@@ -37,3 +40,8 @@ we download all files seen
 when we see a file being deleted, check the name of the file with all files in the directory 
 or we can add all the names of files seen to a list (not the best way to do it)
 then we send that image to the chat with the username 
+
+
+LIST OF EVERYONES USER IDS
+--------------------
+KENZIE: 226804581408047105

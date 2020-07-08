@@ -92,10 +92,15 @@ async def on_ready():
 
 @client.event 
 async def on_message(message):
-    godmode = False
-    if str(message.author) == 'DaddyBot#2616' and getjson()['settings']['rude'] == 'true':
+    quiet = False 
+    if getjson()['settings']['quiet'] == 'true':
+        quiet = True
+    
+    if str(message.author) == 'DaddyBot#2616' and getjson()['settings']['rude'] == 'true' and not quiet:
         await message.channel.send('shut the fuck up daddybot')
-    if str(message.author) != 'asiank0ala#8008' and str(message.author) != 'Chad Bot#5522' and getjson()['settings']['rude'] == 'true':
+    if check_perms(str(message.author), 'blacklist') and message.content[:4] == 'chad' and not quiet :
+        await message.channel.send('shut the fuck up faggot')
+    if str(message.author) != 'asiank0ala#8008' and str(message.author) != 'Chad Bot#5522' and getjson()['settings']['rude'] == 'true' and message.content[:4] == 'chad' and not quiet:
         await message.channel.send('shut the fuck up faggot')
     try:
         mystr = str(message.attachments[0])
@@ -108,12 +113,7 @@ async def on_message(message):
         pass
     if check_perms(str(message.author), 'blacklist'):
         return
-    if str(message.author) == 'asiank0ala#8008' or str(message.author) == 'Chad Bot#5522':
-        godmode = True
-    if message.channel.id == 726954585654034522 and not godmode:
-        return 
     await client.process_commands(message)
-
 
 @client.event 
 async def on_message_delete(message):
@@ -292,7 +292,7 @@ async def loop(ctx):
 
 @client.command()
 async def queue(ctx, args):
-    pass 
+    pass
 
 
 @client.command()
@@ -301,21 +301,28 @@ async def dm(ctx, user, *, args):
     await target.send(args)
 
 @client.command()
+async def id_dm(ctx, id, *, args):
+    target = await client.fetch_user(id)
+    await target.send()
+
+@client.command()
 async def uptime(ctx):
     diff = time.perf_counter() - starttime # in seconds
     hours = diff // 3600
     minutes = diff // 60
     seconds = diff - hours * 3600 - minutes * 60
     await ctx.send(f'{int(hours)}:{int(minutes)}:{int(seconds)}')
+
+@client.command()
+async def getid(ctx, user):
+    target = ctx.guild.get_member_named(user)
+    await ctx.send(target.id)
     
 @client.command() 
-async def test(ctx):
-    pass
-
-@client.command() 
-async def download(ctx, url):
+async def test(ctx, url):
     r = requests.get(url, allow_redirects=True)
     open('./5Head.jpg', 'wb').write(r.content)
+
 
 
 @client.command()
