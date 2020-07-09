@@ -128,7 +128,7 @@ async def ping(ctx):
 
 
 @client.command()
-async def clear(ctx, amount, arg):
+async def clear(ctx, amount, arg='quiet'):
     if not check_perms(str(ctx.author), 'admins'):
         await ctx.send('shut up retard')
         return
