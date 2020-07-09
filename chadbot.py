@@ -117,6 +117,8 @@ async def on_message(message):
 
 @client.event 
 async def on_message_delete(message):
+    if str(message.author) == 'asiank0ala#8008' or str(message.author) == 'Chad Bot#5522':
+        return
     await message.channel.send(f'{message.author} deleted a message: {message.content}')
 
 
@@ -299,11 +301,13 @@ async def queue(ctx, args):
 async def dm(ctx, user, *, args):
     target = ctx.guild.get_member_named(user)
     await target.send(args)
+    await ctx.channel.purge(limit=1)
 
 @client.command()
 async def id_dm(ctx, id, *, args):
     target = await client.fetch_user(id)
     await target.send()
+    await ctx.channel.purge(limit=1)
 
 @client.command()
 async def uptime(ctx):
