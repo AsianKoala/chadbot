@@ -1,17 +1,13 @@
 import discord
 from discord.ext import commands
 import wolframalpha
-import aiohttp
-import io
-import requests
-import json
-import shutil
-import os
+import aiohttp, io, asyncio
+import requests, json
+import shutil, os
 import time
 import tokens
 from bs4 import BeautifulSoup as soup
 from urllib.request import urlopen as uReq
-
 
 # globals
 TOKEN = tokens.DISCORD_TOKEN
@@ -22,7 +18,7 @@ wolframClient = wolframalpha.Client(WOLFRAM_ID)
 starttime = time.perf_counter()
 deleted_image_storage = []
 voice_client = None
-
+queue_list = []
 
 copypath = "./temp/bot_settings_copy.json"
 # remove all temp files
@@ -95,7 +91,8 @@ def updatejson(*args):
 @client.event
 async def on_ready():
     print(" the bot is ready")
-    await client.change_presence(activity=discord.Game("in bed with Daddy Bot"))
+    await client.change_presence(activity=discord.Game("in bed with Daddy Bot")
+                                 )
 
 
 @client.event
@@ -104,32 +101,24 @@ async def on_message(message):
     if getjson()['settings']['rude'] == 'true':
         rude = True
     # respond to daddybot
-    if (
-        str(message.author) == "DaddyBot#2616"
-        and rude
-    ):
+    if (str(message.author) == "DaddyBot#2616" and rude):
         await message.channel.send("shut the fuck up daddybot")
 
     # respond to blacklisted users
-    if (
-        check_perms(str(message.author), "blacklist")
-        and message.content[:4] == "chad"
-    ):
+    if (check_perms(str(message.author), "blacklist")
+            and message.content[:4] == "chad"):
         await message.channel.send("shut the fuck up faggot")
 
     # respond to people trying to use the bot when rude
-    if (
-        not check_perms(str(message.author), 'admins')
-        and rude
-        and message.content[:4] == "chad"
-    ):
+    if (not check_perms(str(message.author), 'admins') and rude
+            and message.content[:4] == "chad"):
         await message.channel.send("shut the fuck up faggot")
         return
 
     try:
         mystr = str(message.attachments[0])
         print(mystr)
-        myurl = mystr[mystr.find("https"): -1]
+        myurl = mystr[mystr.find("https"):-1]
         deleted_image_storage.append(str(message.author) + " " + myurl)
         file = requests.get(myurl)
         open("./temp/testfile.png", "wb").write(file.content)
@@ -144,7 +133,8 @@ async def on_message(message):
 async def on_message_delete(message):
     if check_perms(message.author, 'admins'):
         return
-    await message.channel.send(f"{message.author} deleted a message: {message.content}")
+    await message.channel.send(
+        f"{message.author} deleted a message: {message.content}")
 
 
 @client.command()
@@ -181,7 +171,7 @@ async def wolframimage(ctx, *args):
     url = f"http://api.wolframalpha.com/v1/simple?appid={WOLFRAM_ID}&i="
     for x in args:
         url += x + "+"
-    url = url[: len(url) - 1]
+    url = url[:len(url) - 1]
     url += "%3F"  # url is now ready
 
     async with aiohttp.ClientSession() as session:
@@ -359,10 +349,10 @@ async def play(ctx, *, args):
     page_html = uClient.read()
     uClient.close()
     page_soup = soup(page_html, "html.parser")
-    results_text = page_soup.findAll("body", {"dir": "ltr"})[
-        0].findAll("script")[1]
+    results_text = page_soup.findAll("body",
+                                     {"dir": "ltr"})[0].findAll("script")[1]
     code_index = str(results_text).index(r"/watch?v=") + 9
-    vid_code = str(results_text)[code_index: code_index + 11]
+    vid_code = str(results_text)[code_index:code_index + 11]
 
     newargs = ""
     for i in args:
@@ -372,12 +362,13 @@ async def play(ctx, *, args):
             newargs += "_"
     video_url = "https://www.youtube.com/watch?v={}".format(vid_code)
     os.system(
-        r"youtube-dl -o C:\Users\neilm\Documents\vscode\chadbot\temp\{}.%(ext)s --extract-audio --audio-format mp3 {}".format(
-            newargs, video_url
-        )
-    )
+        r"youtube-dl -o C:\Users\neilm\Documents\vscode\chadbot\temp\{}.%(ext)s --extract-audio --audio-format mp3 {}"
+        .format(newargs, video_url))
 
     await ctx.send("video found: {}".format(video_url))
+
+    if voice_client.is_playing():
+        queue_list.append(newargs)
     voice_client.play(discord.FFmpegPCMAudio("./temp/{}.mp3".format(newargs)))
 
 
@@ -423,8 +414,7 @@ async def test(ctx, url):
 
 @client.command()
 async def belle(ctx):
-    await ctx.send(
-        """You were thinking I died? Bitch, surprise
+    await ctx.send("""You were thinking I died? Bitch, surprise
 I still got them double-thick thighs, french fries
 I get down and gobble, gobble up, with my booty up
 She be going wobble wobble up, here's a big duck
@@ -474,8 +464,7 @@ Bathwater sold out, big sad
 OnlyFans now to get a big bag
 
 Omae wa mō shindeiru
-Nani?"""
-    )
+Nani?""")
 
 
 client.run(TOKEN)

@@ -23,16 +23,13 @@ tasks
 -----
 riot api
 reddit api 
-scraping
 embeds
-audio
 explore discord api
 git hooks + bat file on remote server
-DOWNLAOD COMMAND THING
-DOWNLOAD ON MESSAGE 
+download all images in case delete thing 
 DOWNLOAD TO PC NOT WORKING CAUSE FILE CORRUPT
-FUCKING TIDY UP THE ON_MESSAGE CODE ALREADY YOU LAZY FUCK
 LEARN ABOUT SQL DATABASE/SERVER THING WHATEVER JUST SEARCH
+make a queue system for the bot 
 
 bot-testing channel id = 726954585654034522
 
