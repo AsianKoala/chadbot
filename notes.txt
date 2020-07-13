@@ -42,3 +42,6 @@ when we see a file being deleted, check the name of the file with all files in t
 or we can add all the names of files seen to a list (not the best way to do it)
 then we send that image to the chat with the username 
 
+
+
+https://www.youtube.com/watch?v=VxaGX5Y9Ano

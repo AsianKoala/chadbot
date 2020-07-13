@@ -1,14 +1,1 @@
-{
-    "userlist": {
-        "admins": {
-            "neil": "asiank0ala#8008"
-        },
-        "blacklist": {
-            "ihsan": "Ihso#0002"
-        }
-    },
-    "settings": {
-        "rude": "false",
-        "quiet": "false"
-    }
-}
+{"userlist": {"admins": {"neil": "asiank0ala#8008"}, "blacklist": {"ihsan": "Ihso#0002"}}, "settings": {"rude": "true", "quiet": "false"}}

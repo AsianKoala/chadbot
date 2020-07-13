@@ -18,6 +18,7 @@ client = commands.Bot(command_prefix="chad ")
 wolframClient = wolframalpha.Client(WOLFRAM_ID)
 starttime = time.perf_counter()
 deleted_image_storage = []
+voice_client = None
 
 
 copypath = "./temp/bot_settings_copy.json"
@@ -326,18 +327,56 @@ async def opgg(ctx, *args):
 
 
 @client.command()
-async def play(ctx, args):
-    pass
+async def join(ctx):
+    global voice_client
+    channel = ctx.author.voice.channel
+    voice_client = await channel.connect()
 
 
 @client.command()
-async def loop(ctx):
-    pass
+async def play(ctx, *, args):
+    global voice_client
+    channel = ctx.author.voice.channel
+    if not voice_client.is_connected():
+        voice_client = await channel.connect()
+
+    newargs = ""
+    for i in args:
+        if i != " ":
+            newargs += i
+        else:
+            newargs += "+"
+    print(newargs)
+    myurl = "https://www.youtube.com/results?search_query={}".format(newargs)
+
+    uClient = uReq(myurl)
+    page_html = uClient.read()
+    uClient.close()
+    page_soup = soup(page_html, "html.parser")
+    results_text = page_soup.findAll("body", {"dir": "ltr"})[0].findAll("script")[1]
+    code_index = str(results_text).index(r"/watch?v=") + 9
+    vid_code = str(results_text)[code_index : code_index + 11]
+
+    newargs = ""
+    for i in args:
+        if i != " ":
+            newargs += i
+        else:
+            newargs += "_"
+    video_url = "https://www.youtube.com/watch?v={}".format(vid_code)
+    os.system(
+        r"youtube-dl -o C:\Users\neilm\Documents\vscode\chadbot\temp\{}.%(ext)s --extract-audio --audio-format mp3 {}".format(
+            newargs, video_url
+        )
+    )
+
+    await ctx.send("video found: {}".format(video_url))
+    voice_client.play(discord.FFmpegPCMAudio("./temp/{}.mp3".format(newargs)))
 
 
 @client.command()
-async def queue(ctx, args):
-    pass
+async def leave(ctx):
+    await ctx.voice_client.disconnect()
 
 
 @client.command()

@@ -27,7 +27,6 @@ title = container.div.div.a.img["title"]
 print(title)
 
 # cycle through all the containers in our list and print the titles
-
 for container in containers:
     brand = container.div.div.a.img["title"]
     title_container = container.findAll("a", {"class": "item-title"})
