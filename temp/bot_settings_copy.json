@@ -8,7 +8,6 @@
         }
     },
     "settings": {
-        "rude": "false",
-        "quiet": "false"
+        "rude": "false"
     }
 }

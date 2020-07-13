@@ -1,9 +1,12 @@
 import discord
 from discord.ext import commands
 import wolframalpha
-import aiohttp, io
-import requests, json
-import shutil, os
+import aiohttp
+import io
+import requests
+import json
+import shutil
+import os
 import time
 import tokens
 from bs4 import BeautifulSoup as soup
@@ -97,34 +100,36 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    quiet = False
-    if getjson()["settings"]["quiet"] == "true":
-        quiet = True
-
+    rude = False
+    if getjson()['settings']['rude'] == 'true':
+        rude = True
+    # respond to daddybot
     if (
         str(message.author) == "DaddyBot#2616"
-        and getjson()["settings"]["rude"] == "true"
-        and not quiet
+        and rude
     ):
         await message.channel.send("shut the fuck up daddybot")
+
+    # respond to blacklisted users
     if (
         check_perms(str(message.author), "blacklist")
         and message.content[:4] == "chad"
-        and not quiet
     ):
         await message.channel.send("shut the fuck up faggot")
+
+    # respond to people trying to use the bot when rude
     if (
-        str(message.author) != "asiank0ala#8008"
-        and str(message.author) != "Chad Bot#5522"
-        and getjson()["settings"]["rude"] == "true"
+        not check_perms(str(message.author), 'admins')
+        and rude
         and message.content[:4] == "chad"
-        and not quiet
     ):
         await message.channel.send("shut the fuck up faggot")
+        return
+
     try:
         mystr = str(message.attachments[0])
         print(mystr)
-        myurl = mystr[mystr.find("https") : -1]
+        myurl = mystr[mystr.find("https"): -1]
         deleted_image_storage.append(str(message.author) + " " + myurl)
         file = requests.get(myurl)
         open("./temp/testfile.png", "wb").write(file.content)
@@ -137,10 +142,7 @@ async def on_message(message):
 
 @client.event
 async def on_message_delete(message):
-    if (
-        str(message.author) == "asiank0ala#8008"
-        or str(message.author) == "Chad Bot#5522"
-    ):
+    if check_perms(message.author, 'admins'):
         return
     await message.channel.send(f"{message.author} deleted a message: {message.content}")
 
@@ -303,7 +305,11 @@ async def update(ctx, *args):
             del obj["settings"][args[2]]
     else:
         if len(args) > 3:
-            obj[args[0]][args[1]][args[2]] = args[3]
+            username = ''
+            for k in args[3:]:
+                username += k
+                username += ' '
+            obj[args[0]][args[1]][args[2]] = username[:-1]
         else:
             obj[args[0]][args[1]] = args[2]
 
@@ -353,9 +359,10 @@ async def play(ctx, *, args):
     page_html = uClient.read()
     uClient.close()
     page_soup = soup(page_html, "html.parser")
-    results_text = page_soup.findAll("body", {"dir": "ltr"})[0].findAll("script")[1]
+    results_text = page_soup.findAll("body", {"dir": "ltr"})[
+        0].findAll("script")[1]
     code_index = str(results_text).index(r"/watch?v=") + 9
-    vid_code = str(results_text)[code_index : code_index + 11]
+    vid_code = str(results_text)[code_index: code_index + 11]
 
     newargs = ""
     for i in args:
