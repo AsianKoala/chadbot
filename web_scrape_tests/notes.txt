@@ -1,0 +1,11 @@
+containers[n].a.text gives title of post 
+containers[n].findAll('a')[1].text gives us "THREAD"
+containers[n].findAll('a')[1]['href'] gives us link of the post 
+
+try to find THREAD through containers[n].findAll('a')[1]
+if exception thrown then we know its a saved comment so then do
+
+containers[n].a['href'] to get the post link
+
+
+
