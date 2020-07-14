@@ -5,6 +5,7 @@ import aiohttp, io, asyncio
 import requests, json
 import shutil, os
 import time
+import tokens
 from bs4 import BeautifulSoup as soup
 from urllib.request import urlopen as uReq
 
@@ -146,7 +147,7 @@ async def clear(ctx, amount, arg="quiet"):
     if not check_perms(str(ctx.author), "admins"):
         await ctx.send("shut up retard")
         return
-    deleted = await ctx.channel.purge(limit=int(amount) + 1)
+    await ctx.channel.purge(limit=int(amount) + 1)
     if arg != "quiet":
         await ctx.send(f"deleted {amount} messages")
 
@@ -276,7 +277,7 @@ async def clearbot(ctx, amount):
     if not check_perms(str(ctx.author), "admins"):
         await ctx.send("shut up retard")
         return
-    deleted = await ctx.channel.purge(limit=100, check=is_me)
+    await ctx.channel.purge(limit=100, check=is_me)
     await ctx.send(f"deleted {amount} messages")
 
 
