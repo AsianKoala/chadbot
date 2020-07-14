@@ -5,7 +5,6 @@ import aiohttp, io, asyncio
 import requests, json
 import shutil, os
 import time
-import tokens
 from bs4 import BeautifulSoup as soup
 from urllib.request import urlopen as uReq
 
